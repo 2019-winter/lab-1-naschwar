@@ -48,44 +48,89 @@ For the following exercises please read the Python appendix in the Marsland text
 ```python
 # YOUR SOLUTION HERE
 #a=1000
-print('this is my answer',a+1) 
+import numpy as np
+a = np.ones((6,4), dtype=np.int)*2
+print(a)
 ```
 
 ## Exercise 2
 
 ```python
-# YOUR SOLUTION HERE
-a=2000
+b = np.ones((6,4), dtype=np.int)
+#np.fill_diagonal(b,3)
+b[[0,1,2,3],[0,1,2,3]]=3
+#note: inner arrays must be same size
+print(b)
 ```
 
 ## Exercise 3
 
 ```python
+c = a*b
+print(c)
+
+```
+
+```python
 # YOUR SOLUTION HERE
+The multiplication operation works differently than the dot operation. The multiplication by default works
+by multiplying each element in one matrix by the corresponding element in the other matrix. Since 
+the matrices are the same size, this operation will work. The dot product requires that the number of columns 
+in the first matrix match the number of rows in the second matrix.
 ```
 
 ## Exercise 4
 
 ```python
-# YOUR SOLUTION HERE
+import numpy as np
+transpA = np.dot(np.transpose(a), b)
+print(transpA)
+
+transpB = np.dot(a, np.transpose(b))
+print(transpB)# YOUR SOLUTION HERE
+
+print("The matrix that results from a dot product has the number of rows of the first matrix and the number of columns of the second matrix. Thus, it matters whether the transposed matrix is in the first or second position. ")
 ```
 
 ## Exercise 5
 
 ```python
-# YOUR SOLUTION HERE
+print("my name is output")
 ```
 
 ## Exercise 6
 
 ```python
-# YOUR SOLUTION HERE
+a = np.random.randint(2,6,(4,6))
+b = np.random.randint(1, 10,(2,3))
+print('a = \n', a)
+print('\nb = \n', b)
+print('\nsum of a =', np.sum(a))
+print('\nsum of b columns =', np.sum(b, axis =0))
+print('\nsum of a rows=', np.sum(a, axis = 1))
+print('\nmean of b = ', np.mean(b))
+
 ```
 
 ## Exercise 7
 
 ```python
-# YOUR SOLUTION HERE
+a = np.random.randint(0,6,(3,6))
+
+def countOnes(arr):
+    count =0
+    print(arr)
+    for x in range(len(arr)):
+        for y in range(len(arr[x])):
+            if arr[x][y] == 1:
+                count+=1
+    print('counting ones with loop= ', count)
+   
+countOnes(a)
+
+b = np.where(a == 1, 1, 0)
+print('counting ones with np.where=',np.sum(b))
+   
 ```
 
 ## Excercises 8-???
@@ -96,28 +141,44 @@ While the Marsland book avoids using another popular package called Pandas, we w
 Repeat exercise A.1 from Marsland, but create a Pandas DataFrame instead of a NumPy array.
 
 ```python
-# YOUR SOLUTION HERE
+import pandas as pd
+a1 = [[2,2,2,2], [2,2,2,2], [2,2,2,2], [2,2,2,2], [2,2,2,2],[2,2,2,2]]
+a = pd.DataFrame(a1, dtype =int)
+a
+
+a = pd.DataFrame(2, index=np.arange(6), columns=np.arange(4))
+a
 ```
 
 ## Exercise 9
 Repeat exercise A.2 using a DataFrame instead.
 
 ```python
-# YOUR SOLUTION HERE
+
+b = pd.DataFrame(1, index=np.arange(6), columns=np.arange(4))
+np.fill_diagonal(b.values,3)
+b
+
+
 ```
 
 ## Exercise 10
 Repeat exercise A.3 using DataFrames instead.
 
 ```python
-# YOUR SOLUTION HERE
+c = a * b
+print(c)
 ```
 
 ## Exercise 11
 Repeat exercise A.7 using a dataframe.
 
 ```python
-# YOUR SOLUTION HERE
+a = pd.DataFrame(np.random.randint(0, 3, size = (3, 4)))
+print('arr =\n', a)
+b = a.where(a==1)
+count = np.sum(b.count())
+print('number of ones =', count)
 ```
 
 ## Exercises 12-14
@@ -125,7 +186,7 @@ Now let's look at a real dataset, and talk about ``.loc``. For this exercise, we
 
 ```python
 titanic_df = pd.read_csv(
-    "https://raw.githubusercontent.com/dlsun/data-science-book/master/data/titanic.csv"
+    "https://raw.githubusercontent.com/dlsun/data-science-book/master/data/titanic.csv", delimiter=','
 )
 titanic_df
 ```
@@ -137,22 +198,28 @@ Notice how we have nice headers and mixed datatypes? That is one of the reasons 
 How do you select the ``name`` column without using .iloc?
 
 ```python
-## YOUR SOLUTION HERE
+titanic_df['name']
 ```
 
 ## Exercise 13
 After setting the index to ``sex``, how do you select all passengers that are ``female``? And how many female passengers are there?
 
 ```python
-## YOUR SOLUTION HERE
-titanic_df.set_index('sex',inplace=True)
+titanic_df = pd.read_csv(
+    "https://raw.githubusercontent.com/dlsun/data-science-book/master/data/titanic.csv", delimiter=','
+)
+titanic_df.set_index('sex', inplace=True)
+df = titanic_df.loc['female']
+df
+
 ```
 
 ## Exercise 14
 How do you reset the index?
 
 ```python
-## YOUR SOLUTION HERE
+titanic_df.reset_index(inplace=True)
+titanic_df
 ```
 
 ```python
